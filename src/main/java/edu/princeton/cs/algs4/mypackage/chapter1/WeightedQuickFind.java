@@ -3,8 +3,8 @@ package edu.princeton.cs.algs4.mypackage.chapter1;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-public class UF {
-    private int[] parent;  // parent[i] = parent of i
+public class WeightedQuickFind {
+    private final int[] parent;  // parent[i] = parent of i
     private int count;     // number of components
 
     /**
@@ -12,7 +12,7 @@ public class UF {
      *
      * @param n
      */
-    public UF(int n) {
+    public WeightedQuickFind(int n) {
         if (n < 0) {
             throw new IllegalArgumentException("number less than 0");
         }
@@ -27,8 +27,11 @@ public class UF {
      * 在p和q之间添加一条连接
      * 如果p和q不在一个连接中，那么就应该将p和q所在的联通分量合并
      * <p>
-     * 分析：单次执行union的时间复杂度：O（N）
-     * 对于一个较大的数据集，建立起联通网络。最终用来判断某些节点是否是联通的。则执行的时间是O(N)*O(N)=O(N^2)的时间复杂度
+     * 我们由p和q的链接分别找到它们的根触点，然后只需将一个根触点链接到另一个即可将一个分量重命名为另一个分量，因此这个算法叫做quick-union
+     * 使用根触点的方式，判断两个节点所在的根节点是否相同，如果相同，那么属于相同的节点
+     * 如果不相同，那么就将两者的根节点，修改成相同的数值即可
+     * <p>
+     * 时间复杂度：2*O(find)+1 = log(N)
      *
      * @param p
      * @param q
@@ -39,24 +42,23 @@ public class UF {
             return;
         }
         // p和q不在同一个连接，将p和q所在的联通分量，进行合并
-        for (int index = 0; index < parent.length; index++) {
-            if (find(index) == find(q)) {
-                //将q所在的联通分量，归并值p所在的联通分量
-                parent[index] = find(p);
-                count--;
-            }
-        }
+        parent[find(q)] = find(p);
+        count--;
     }
 
     /**
-     * p所在连接的标识（0~N-1）
+     * 找到分量的名称
+     * 时间复杂度log(N)
      *
      * @param p
      * @return
      */
     public int find(int p) {
         validate(p);
-        return parent[p];
+        while (p != parent[p]) {
+            p = parent[p];
+        }
+        return p;
     }
 
     /**
@@ -89,7 +91,7 @@ public class UF {
 
     public static void main(String[] args) {
         int n = StdIn.readInt();
-        UF uf = new UF(n);
+        WeightedQuickFind uf = new WeightedQuickFind(n);
         while (!StdIn.isEmpty()) {
             int p = StdIn.readInt();
             int q = StdIn.readInt();
