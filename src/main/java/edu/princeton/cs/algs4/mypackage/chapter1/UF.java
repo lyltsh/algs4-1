@@ -1,5 +1,8 @@
 package edu.princeton.cs.algs4.mypackage.chapter1;
 
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
 public class UF {
     private int[] parent;  // parent[i] = parent of i
     private int count;     // number of components
@@ -23,6 +26,9 @@ public class UF {
     /**
      * 在p和q之间添加一条连接
      * 如果p和q不在一个连接中，那么就应该将p和q所在的联通分量合并
+     * <p>
+     * 分析：单次执行union的时间复杂度：O（N）
+     * 对于一个较大的数据集，建立起联通网络。最终用来判断某些节点是否是联通的。则执行的时间是O(N)*O(N)=O(N^2)的时间复杂度
      *
      * @param p
      * @param q
@@ -79,5 +85,20 @@ public class UF {
         if (p < 0 || p >= n) {
             throw new IllegalArgumentException("index " + p + " is not between 0 and " + (n - 1));
         }
+    }
+
+    public static void main(String[] args) {
+        int n = StdIn.readInt();
+        UF uf = new UF(n);
+        while (!StdIn.isEmpty()) {
+            int p = StdIn.readInt();
+            int q = StdIn.readInt();
+            if (uf.connected(p, q)) {
+                continue;
+            }
+            uf.union(p, q);
+            StdOut.println(p + " " + q);
+        }
+        StdOut.println(uf.count() + " components");
     }
 }
