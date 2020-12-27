@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class WeightedQuickFind {
     private final int[] parent;  // parent[i] = parent of i
+    private int[] rank;   // 各个根节点所对应分量的大小（节点的个数）
     private int count;     // number of components
 
     /**
@@ -17,9 +18,11 @@ public class WeightedQuickFind {
             throw new IllegalArgumentException("number less than 0");
         }
         parent = new int[n];
+        rank = new int[n];
         count = n;
         for (int index = 0; index < n; index++) {
             parent[index] = index;
+            rank[index] = 1;
         }
     }
 
@@ -30,6 +33,8 @@ public class WeightedQuickFind {
      * 我们由p和q的链接分别找到它们的根触点，然后只需将一个根触点链接到另一个即可将一个分量重命名为另一个分量，因此这个算法叫做quick-union
      * 使用根触点的方式，判断两个节点所在的根节点是否相同，如果相同，那么属于相同的节点
      * 如果不相同，那么就将两者的根节点，修改成相同的数值即可
+     * <p>
+     * 判断根节点树的大小（总节点合计数量）小的树合并至大的树
      * <p>
      * 时间复杂度：2*O(find)+1 = log(N)
      *
@@ -42,7 +47,19 @@ public class WeightedQuickFind {
             return;
         }
         // p和q不在同一个连接，将p和q所在的联通分量，进行合并
-        parent[find(q)] = find(p);
+        int rootP = find(p);
+        int rootQ = find(q);
+        if (rank[rootP] > rank[rootQ]) {
+            //P所在的树，节点数量大于Q所在的树。将Q所在节点，合并到P所在的树之中。
+            parent[rootQ] = rootP;
+            rank[rootP] += rank[rootQ];
+            rank[rootQ] += rank[rootQ];
+        } else {
+            //将P所在节点，合并至Q所在的树
+            parent[rootP] = rootQ;
+            rank[rootQ] += rank[rootP];
+            rank[rootP] += rank[rootP];
+        }
         count--;
     }
 
