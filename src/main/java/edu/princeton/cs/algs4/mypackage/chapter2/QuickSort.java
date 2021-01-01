@@ -23,8 +23,12 @@ public class QuickSort extends MySortExample {
         int j = high;
         Comparable target = a[low];
         while (true) {
-            while (less(a[i++], target) && i < j) break;
-            while (less(target, a[j--]) && j > i) break;
+            while (less(a[i++], target) && i < j) {
+                break;
+            }
+            while (less(target, a[j--]) && j > i) {
+                break;
+            }
             exch(a, i, j);
             if (i >= j) {
                 break;
@@ -32,5 +36,18 @@ public class QuickSort extends MySortExample {
         }
         exch(a, low, i);
         return i;
+    }
+
+    public static void main(String[] args) {
+        Double[] a = new Double[10];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = Math.random();
+        }
+        System.out.println("Before Sort");
+        show(a);
+        sort(a);
+        assert isSorted(a);
+        System.out.println("After Sort");
+        show(a);
     }
 }

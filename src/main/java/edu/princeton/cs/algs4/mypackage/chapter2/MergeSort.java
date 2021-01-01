@@ -1,13 +1,17 @@
 package edu.princeton.cs.algs4.mypackage.chapter2;
 
-
 public class MergeSort extends MySortExample {
+
+    //一次性定义存储空间
+    private static Comparable[] aux;
+
     /**
      * 归并排序
      *
      * @param a
      */
     public static void sort(Comparable[] a) {
+        aux = new Comparable[a.length];
         mergeSort(a, 0, a.length - 1);
     }
 
@@ -24,26 +28,21 @@ public class MergeSort extends MySortExample {
     private static void merge(Comparable[] a, int low, int mid, int high) {
         int i = low;
         int j = mid + 1;
-        Comparable[] temp = new Comparable[high - low + 1];
+
         for (int k = low; k <= high; k++) {
-            temp[k] = a[k];
+            //将a数组的元素复制一份到aux之中
+            aux[k] = a[k];
         }
         for (int k = low; k <= high; k++) {
             if (i > mid) {
-                temp[k] = a[j++];
+                a[k] = aux[j++];
+            } else if (j > high) {
+                a[k] = aux[i++];
+            } else if (less(aux[i], aux[j])) {
+                a[k] = aux[i++];
+            } else {
+                a[k] = aux[j++];
             }
-            if (j > high) {
-                temp[k] = a[i++];
-            }
-            if (less(a[i], a[j])) {
-                temp[k] = a[i++];
-            } else if (less(a[j], a[i])) {
-                temp[k] = a[j++];
-            }
-        }
-        //赋值回原数组之中
-        for (int k = low; k <= high; k++) {
-            a[k] = temp[k];
         }
     }
 
@@ -62,5 +61,18 @@ public class MergeSort extends MySortExample {
                 merge(a, lo, lo + sz - 1, Math.min(lo + sz + sz - 1, a.length - 1));
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Double[] a = new Double[40];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = Math.random();
+        }
+        System.out.println("Before Sort");
+        show(a);
+        sort(a);
+        assert isSorted(a);
+        System.out.println("After Sort");
+        show(a);
     }
 }

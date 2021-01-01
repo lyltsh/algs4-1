@@ -29,4 +29,16 @@ public class SelectionSort extends MySortExample {
         return minIndex;
     }
 
+    public static void main(String[] args) {
+        Double[] a = new Double[10];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = Math.random();
+        }
+        System.out.println("Before Sort");
+        show(a);
+        sort(a);
+        assert isSorted(a);
+        System.out.println("After Sort");
+        show(a);
+    }
 }

@@ -38,12 +38,28 @@ public class HeapSort extends MySortExample {
     private void sink(int k) {
         while (2 * k <= N) {
             int j = 2 * k;
-            if (j < N && less(pq[j], pq[j + 1])) j++;
+            if (j < N && less(pq[j], pq[j + 1])) {
+                j++;
+            }
 
-            if (!less(pq[k], pq[j]))
+            if (!less(pq[k], pq[j])) {
                 break;
+            }
             exch(pq, k, j);
             k = j;
         }
+    }
+
+    public static void main(String[] args) {
+        Double[] a = new Double[10];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = Math.random();
+        }
+        System.out.println("Before Sort");
+        show(a);
+        sort(a);
+        assert isSorted(a);
+        System.out.println("After Sort");
+        show(a);
     }
 }
