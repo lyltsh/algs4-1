@@ -1,6 +1,6 @@
 package edu.princeton.cs.algs4.mypackage.chapter2;
 
-public class MergeSort extends MySortExample {
+public class MergeSortUseInsertSort extends MySortExample {
 
     //一次性定义存储空间
     //这种方式带来的问题：是否会存在线程安全的问题，多个线程同时调用排序算法.
@@ -17,8 +17,26 @@ public class MergeSort extends MySortExample {
         mergeSort(a, 0, a.length - 1);
     }
 
+    /**
+     * 改良版。对于小规模数组的排序，使用插入排序的方式，进行改良优化
+     *
+     * @param a
+     * @param low
+     * @param high
+     */
     private static void mergeSort(Comparable[] a, int low, int high) {
         if (high <= low) {
+            return;
+        }
+        //对于数组大小在16以内的数组，使用插入排序进行处理
+        if (high - low <= 16) {
+            for (int i = low + 1; i <= high; i++) {
+                for (int j = i; j > low; j--) {
+                    if (less(a[j], a[j - 1])) {
+                        exch(a, j, j - 1);
+                    }
+                }
+            }
             return;
         }
         int mid = (low + high) / 2;
@@ -32,6 +50,7 @@ public class MergeSort extends MySortExample {
         if (less(a[mid], a[mid + 1])) {
             return;
         }
+
         int i = low;
         int j = mid + 1;
 
@@ -53,7 +72,7 @@ public class MergeSort extends MySortExample {
     }
 
     public static void main(String[] args) {
-        Double[] a = new Double[10000];
+        Double[] a = new Double[40000000];
         for (int i = 0; i < a.length; i++) {
             a[i] = Math.random();
         }
