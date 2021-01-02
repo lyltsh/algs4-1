@@ -3,6 +3,7 @@ package edu.princeton.cs.algs4.mypackage.chapter2;
 public class MergeSort extends MySortExample {
 
     //一次性定义存储空间
+    //这种方式带来的问题：是否会存在线程安全的问题，多个线程同时调用排序算法.
     private static Comparable[] aux;
 
     /**
@@ -11,6 +12,7 @@ public class MergeSort extends MySortExample {
      * @param a
      */
     public static void sort(Comparable[] a) {
+        //一次性分配临时变量的存储空间
         aux = new Comparable[a.length];
         mergeSort(a, 0, a.length - 1);
     }
