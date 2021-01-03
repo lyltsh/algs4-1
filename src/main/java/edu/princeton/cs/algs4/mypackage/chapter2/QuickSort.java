@@ -38,13 +38,13 @@ public class QuickSort extends MySortExample {
         if (low >= high) {
             return low;
         }
-        int start = low;
+        Comparable start = a[low];
         int i = low + 1, j = high;
         while (true) {
-            while (less(a[i], a[start]) && i < high) {
+            while (less(a[i], start) && i < high) {
                 i++;
             }
-            while (less(a[start], a[j]) && j > low) {
+            while (less(start, a[j]) && j > low) {
                 j--;
             }
             if (i >= j) {
@@ -52,7 +52,7 @@ public class QuickSort extends MySortExample {
             }
             exch(a, i, j);
         }
-        exch(a, start, j);
+        exch(a, low, j);
         return j;
     }
 
